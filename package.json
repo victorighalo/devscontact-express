@@ -1,0 +1,25 @@
+{
+  "name": "devscontact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victorighalo/devscontact-express.git"
+  },
+  "author": "Victor Ighalo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/victorighalo/devscontact-express/issues"
+  },
+  "homepage": "https://github.com/victorighalo/devscontact-express#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-generator": "^4.16.0",
+    "mongoose": "^5.3.14"
+  }
+}
