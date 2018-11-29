@@ -1,13 +1,4 @@
 const mongoose = require('mongoose');
-const url = "mongodb://victorighalo:smart%401@ds119304.mlab.com:19304/devsconnect"
-mongoose.set('debug', true);
-mongoose.connect(url);
-mongoose.PromiseProvider = Promise;
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function () {
-    console.log("we're connected!");
-});
 
 const DevSchema = new mongoose.Schema({
         firstname: {
@@ -34,11 +25,9 @@ const DevSchema = new mongoose.Schema({
             maxlength: 1024
         },
     category: {
-        type: String,
-        required: true,
-        minlength: 3,
-        maxlength: 50
-    },
+        type: Number,
+        required: true
+    }
     },{
         timestamps: {
             createdAt: 'createdAt',
@@ -47,6 +36,26 @@ const DevSchema = new mongoose.Schema({
     }
 );
 
-var Devs = mongoose.model('Developer', DevSchema);
+const DevCatSchema = new mongoose.Schema({
+        categoryid: {
+            type: Number,
+            required:true,
+            maxlength: 55
+        },
+        categoryname: {
+            type: String,
+            required: true,
+            maxlength: 55
+        }
+    },{
+        timestamps: {
+            createdAt: 'createdAt',
+            updatedAt: 'updatedAt'
+        }
+    }
+);
 
-module.exports = Devs;
+const DevCat = mongoose.model('Category', DevCatSchema);
+const Devs = mongoose.model('Developer', DevSchema);
+
+module.exports = {Devs, DevCat};
