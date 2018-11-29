@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "mocha ./tests --recursive"
+    "start": "node -r dotenv/config index.js",
+    "test": "mocha --timeout 10000 ./tests --recursive"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,8 @@
   "homepage": "https://github.com/victorighalo/devscontact-express#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
+    "chai-http": "^4.2.0",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "express-generator": "^4.16.0",
     "mongoose": "^5.3.14"

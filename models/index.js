@@ -1,7 +1,13 @@
+require('dotenv').config()
 const mongoose = require('mongoose');
-const url = "mongodb://victorighalo:smart%401@ds119304.mlab.com:19304/devsconnect"
 mongoose.set('debug', true);
-mongoose.connect(url);
+if(process.env.NODE_ENV == 'DEVELOPMENT'){
+    mongoose.connect(process.env.DB_HOST);
+}else{
+   mongoose.connect(process.env.DB_HOST_TEST);
+}
+
+
 mongoose.PromiseProvider = Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
