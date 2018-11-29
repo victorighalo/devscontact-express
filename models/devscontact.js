@@ -25,7 +25,8 @@ const DevSchema = new mongoose.Schema({
             maxlength: 1024
         },
     category: {
-        type: Number,
+        type: mongoose.Types.ObjectId,
+        ref: 'Category',
         required: true
     }
     },{
@@ -36,26 +37,6 @@ const DevSchema = new mongoose.Schema({
     }
 );
 
-const DevCatSchema = new mongoose.Schema({
-        categoryid: {
-            type: Number,
-            required:true,
-            maxlength: 55
-        },
-        categoryname: {
-            type: String,
-            required: true,
-            maxlength: 55
-        }
-    },{
-        timestamps: {
-            createdAt: 'createdAt',
-            updatedAt: 'updatedAt'
-        }
-    }
-);
-
-const DevCat = mongoose.model('Category', DevCatSchema);
 const Devs = mongoose.model('Developer', DevSchema);
 
-module.exports = {Devs, DevCat};
+module.exports = Devs;

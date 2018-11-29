@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router()
-const db = require('../models/devscontact')
+const db = require('../models/index')
 
 router.get('/', function (req, res) {
-    dbDevCat.find({}, function (err, devs) {
+    db.DevCat.find({}, function (err, devs) {
         res.status(200).send(devs);
     })
 })
@@ -19,8 +19,7 @@ router.post('/', async function (req, res) {
         }
     });
     await db.DevCat({
-        categoryid: req.body.categoryid,
-        categoryname: req.body.categoryname
+        name: req.body.name
     }).save()
     res.status(200).send({data: 'Category added registered', status: 'done'});
 })

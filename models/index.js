@@ -9,3 +9,7 @@ db.once('open', function () {
     console.log("we're connected!");
 });
 
+const DevCat = require('./devscategory');
+const Devs = require('./devscontact');
+
+module.exports = {Devs, DevCat};
