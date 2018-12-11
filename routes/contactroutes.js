@@ -12,24 +12,20 @@ router.get('/', function (req, res) {
   });
 }
 catch(e){
-    return res.status(400).send({data:e, status: 'fail'});
+    next(new Error(e));
 }
 })
 
-router.post('/', async function (req, res) {
-    await db.DevCat.findById(req.body.category, function(err, devcat){
-        if(err) { return res.status(400).send({data: err, status: 'fail'});}
-    //    return res.status(400).send({data: devcat, status: 'fail'});
-   
+router.post('/', async function (req, res) {   
     //Check if Dev already exists in Database
-   db.Devs.findOne({email: req.body.email}, (err, dev) => {
-        if(err){//If error in query return error
-            return res.status(400).send({data: err, status: 'fail'});
-        }
-        if(dev){//Dev already exists, the email is already taken
-            return res.status(400).send({data: `Developer with email(${req.body.email}) already exists`, status: 'fail'});
-        }
-    });
+   db.Devs.findOne({email: req.body.email})
+   .then( data => {
+    res.status(400);
+    next(new Error(`Developer with email(${req.body.email}) already exists`))
+   })
+   .catch( e => {
+       next(new Error(e));
+   });
 
     try{
     db.Devs({
@@ -39,39 +35,39 @@ router.post('/', async function (req, res) {
         phone: req.body.phone,
         category: req.body.category,
     }).save((err, data) => {
-        return res.status(200).send({message: 'Developer registered',data: data, status: 'done'});
+        return res.status(200).send({message: 'Developer registered',data: data});
     })
     }catch(e){
-        return res.status(400).send({data:e, status: 'fail'});
+        next(new Error(e));
     }
-    
-});
 })
 
 router.put('/', async function (req, res) {
-    try{
-            await db.Devs.findOneAndUpdate({
-                email: req.body.email
-            }, req.body, {new: true}, function (err, data) {
-                if (err) return res.status(400).send({data:err, status: 'fail'});
-                return res.status(200).send({message: 'Developer contact updated',data: data, status: 'done'});
-            });
-        }catch(e){
-            return res.status(400).send({data:e, status: 'fail'});
-        }
+        await db.Devs.findByIdAndUpdate(req.body.id, {
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+            phone: req.body.phone,
+            category: req.body.category
+        })
+        .then( (data)=> {
+            res.status(200).send({message:'Contact updated'});
+        })
+        .catch( e => {
+            next(new Error(e));
+        })
 })
 
 router.delete('/', async function (req, res) {
-    try{
-    await db.Devs.findOneAndRemove({
-        email: req.body.email
-    }, function (err, data) {
-        if (err) return res.status(400).send({data:err, status: 'fail'});
-        return res.status(200).send({data:data, status: 'done'});
-    });
-}catch(e){
-    return res.status(400).send({data:e, status: 'fail'});
-}
+db.Devs.findByIdAndDelete(
+    req.body.id
+   )
+   .then( data => {
+       res.status(200).send({message:'Developer deleted'})
+   })
+   .catch( e =>{
+        netx(new Error(e));
+   })
 })
 
 module.exports = router;

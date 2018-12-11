@@ -7,7 +7,6 @@ if(process.env.NODE_ENV == 'DEVELOPMENT'){
    mongoose.connect(process.env.DB_HOST_TEST);
 }
 
-
 mongoose.PromiseProvider = Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));

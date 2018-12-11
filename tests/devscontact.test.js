@@ -44,7 +44,7 @@ describe('/POST new Developer Category', () => {
           .post('/category')
           .send(DevCat)
           .end((err, res) => {
-            catId = res.body.data.data._id
+            catId = res.body.data._id
                 res.should.have.status(200);
             done();
           });
