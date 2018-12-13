@@ -20,7 +20,7 @@ exports.contact_get = function(req, res, next){
     try{
     db.Devs.findById(req.params.contactId, function (err, data) {
         if(err){
-            res.status(400).next(err);
+            next(err);
         }
         res.status(200).send(data)
     });

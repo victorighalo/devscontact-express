@@ -5,7 +5,7 @@ const apiMiddleware = require('../app/middleware/api')
 
 router.get('/', contactController.contact_get_all);
 
-router.get('/:contactId', contactController.contact_get);
+router.get('/:contactId',apiMiddleware, contactController.contact_get);
 
 router.post('/',apiMiddleware, contactController.contact_create)
 

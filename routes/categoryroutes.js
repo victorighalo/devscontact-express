@@ -5,7 +5,7 @@ const apiMiddleware = require('../app/middleware/api')
 
 router.get('/', categorycontroller.category_get_all)
 
-router.get('/:categoryId', categorycontroller.category_get);
+router.get('/:categoryId',apiMiddleware, categorycontroller.category_get);
 
 router.post('/',apiMiddleware, categorycontroller.category_create)
 

@@ -15,7 +15,7 @@ exports.category_get = function(req, res, next){
     try{
     db.DevCat.findById(req.params.categoryId, function (err, data) {
         if(err){
-            res.status(400).next(err);
+            next(err);
         }
         res.status(200).send(data)
     });
