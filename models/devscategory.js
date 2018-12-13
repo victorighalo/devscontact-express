@@ -4,7 +4,8 @@ const DevCatSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        maxlength: 55
+        maxlength: 55,
+        unique: [true, 'Category already exists']
     }
 },{
     timestamps: {

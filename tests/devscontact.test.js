@@ -18,8 +18,7 @@ let DevContact;
             Db.DevCat.remove({}, (err) => { 
                 done();           
              });          
-        });    
-               
+        });          
     });
 
 describe('/GET empty Devs Contact', () => {

@@ -2,9 +2,9 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 mongoose.set('debug', true);
 if(process.env.NODE_ENV == 'DEVELOPMENT'){
-    mongoose.connect(process.env.DB_HOST);
+    mongoose.connect(process.env.DB_HOST, { useCreateIndex: true });
 }else{
-   mongoose.connect(process.env.DB_HOST_TEST);
+   mongoose.connect(process.env.DB_HOST_TEST, { useCreateIndex: true });
 }
 
 mongoose.PromiseProvider = Promise;
@@ -16,5 +16,6 @@ db.once('open', function () {
 
 const DevCat = require('./devscategory');
 const Devs = require('./devscontact');
+const User = require('./user');
 
-module.exports = {Devs, DevCat};
+module.exports = {Devs, DevCat, User};

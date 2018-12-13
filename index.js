@@ -1,16 +1,21 @@
 require('dotenv').config()
 const express = require('express')
-const app = express()
+const app = express();
+const passport = require('passport');
 var bodyParser = require('body-parser');
 const { MongoError } = require('mongodb');
-require('./models/index');
+// require('./models/index');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));                               
 app.use(bodyParser.json({ type: 'application/json'}));  
+app.use(passport.initialize());
+
 const devsContactRoutes = require('./routes/contactroutes');
 const devsCategoryRoutes = require('./routes/categoryroutes');
+const authRoutes = require('./routes/authroutes');
 const port = 3000
 
+app.use('/auth', authRoutes);
 app.use('/contact', devsContactRoutes);
 app.use('/category', devsCategoryRoutes);
 app.use((req, res, next) => {
