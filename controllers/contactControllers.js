@@ -79,7 +79,7 @@ exports.contact_delete = function (req, res, next) {
         req.body.id
        )
        .then( data => {
-           res.status(204).send({message:'Developer deleted'})
+           res.status(200).send({message:'Developer deleted'})
        })
        .catch( e =>{
             next(new Error(e));

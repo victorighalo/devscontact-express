@@ -10,6 +10,14 @@ router.post('/register', authController.user_create);
 //Login
 router.post('/login', authController.user_login);
 
+router.get('/auth/users', function(){
+
+})
+
+router.get('/auth/users/:userId', function(){
+    
+})
+
 // //Logout
 // router.post('/logout', function(req, res){
 // res.send(req.body)

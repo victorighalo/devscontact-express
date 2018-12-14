@@ -1,5 +1,4 @@
 process.env.NODE_ENV = 'TEST';
-
 let mongoose = require("mongoose");
 let Db = require('../models/index');
 
@@ -10,18 +9,33 @@ let server = require('../index');
 let should = chai.should();
 chai.use(chaiHttp);
 
-describe('Test Devs Contact and Categories', () => {
+describe('Test Suite - Devs Contact and Categories', () => {
 let catId;
 let DevContact;
+
+//Reset the DB before starting tests
     before((done) => { 
-        Db.Devs.remove({}, (err) => { 
-            Db.DevCat.remove({}, (err) => { 
-                done();           
+        Db.Devs.deleteMany,({}, (err) => { 
+            if(err) done(err)
+            Db.DevCat.deleteMany,({}, (err) => { 
+                if(err) {done(err)}
+                Db.User.deleteMany,({}, (err) => { 
+                    if(err) done(err)
+                              
+                 });             
              });          
         });          
     });
 
-describe('Test Devs Contact and Categories after Deleting all records the from database', () => {
+//     before(async () => {
+//         const collections = await Db.collections();
+//         for (let collection of collections) {       
+//              await collection.deleteOne(); 
+//         }
+//    })
+
+describe('Test Devs Contact and Categories endpoints after Deleting all records the from database', () => {
+
     it('it should return empty array of Devs contact', (done) => {
       chai.request(server)
           .get('/contact')
@@ -45,9 +59,9 @@ describe('Test Devs Contact and Categories after Deleting all records the from d
       });
 });
 
-describe('TEST Developer Category End Points without Auth Token', () => {
+describe('TEST Category End Points without Auth Token', () => {
 
-    it('it should fail to POST a new Developer Category' , (done) => {
+    it('it should fail to POST a new Category' , (done) => {
         let DevCat = {
             name: "Front End"
         }
@@ -60,7 +74,7 @@ describe('TEST Developer Category End Points without Auth Token', () => {
           });
     });
 
-    it('it should fail to Update a Developer Category' , (done) => {
+    it('it should fail to Update a Category' , (done) => {
         let DevCat = {
             id: 'hsfwadoiwabwadaj9342342',
             name: "Front End"
@@ -74,7 +88,7 @@ describe('TEST Developer Category End Points without Auth Token', () => {
           });
     });
 
-    it('it should fail to Access a single Developer Category' , (done) => {
+    it('it should fail to Access a single Category' , (done) => {
       chai.request(server)
           .get('/category/774626njdsfen34')
           .end((err, res) => {
@@ -83,7 +97,7 @@ describe('TEST Developer Category End Points without Auth Token', () => {
           });
     });
 
-    it('it should fail to Delete a Developer Category' , (done) => {
+    it('it should fail to Delete a Category' , (done) => {
         let Data = {
             id: 'jkndsr34343sdfwekn'
         }
@@ -154,6 +168,61 @@ describe('TEST Developer Category End Points without Auth Token', () => {
               done();
             });
       });
+
+      describe('Authentications Tests', () => {
+          it('It should fail to Register a new User with wrong parameters sent', (done)=>{
+              let Data = {
+                firstnam: 'Victor',
+                lastname: 'Ighalo',
+                email: 'victorighalo@gmail.com',
+                password: 'testpassword@1_2'
+
+              }
+              chai.request(server)
+                .post('/auth/register')
+                .send(Data)
+                .end( (err, res) => {
+                    res.should.have.status(500);
+                    done();
+                })
+          });
+
+          it('It should fail to Login with unregistered user details', (done)=>{
+            let Data = {
+              email: 'victorighalo@gmail.com',
+              password: 'testpassword@1_2'
+
+            }
+            chai.request(server)
+              .post('/auth/login')
+              .send(Data)
+              .end( (err, res) => {
+                  res.should.have.status(400);
+                  done();
+              })
+        });
+
+        it('It should Register a new User successfully', (done)=>{
+            let Data = {
+              firstname: 'Victor',
+              lastname: 'Ighalo',
+              email: 'victorighalo@gmail.com',
+              password: 'testpassword@1_2'
+
+            }
+            try{
+            chai.request(server)
+              .post('/auth/register')
+              .send(Data)
+              .end( (err, res) => {
+                  res.should.have.status(201);
+                  done();
+              })
+            }catch (e) {
+                done(e);
+            }
+        });
+      })
 
 });
 

@@ -19,7 +19,6 @@ exports.user_create =  function(req, res, next){
             }
 
     db.User.init().then(function() {
-        try{
         db.User({
             firstname: req.body.firstname,
             lastname: req.body.lastname,
@@ -27,13 +26,12 @@ exports.user_create =  function(req, res, next){
             password: hash
         }).save((err, data) => {
             if(!err){
-                res.status(201).send({message: 'User registered',data: data});
+                return res.status(201).send({message: 'User registered',data: data});
+                  }else{
+                    next(`User with email (${req.body.email}) already exists`);
                   }
-                  res.status(400).send({message: `User with email (${req.body.email}) already exists`, data: err});
         })
-        }catch(e){
-            next(new Error(e));
-        }
+
     }).catch( (e)=>{
         next(new Error(e));
     });
@@ -66,4 +64,28 @@ exports.user_login = function(req, res, next){
     
         }
         )(req,res);
+
+exports.get_users_all = function(req, res, next){
+    db.User.find({})
+    .then( data => {
+        res.status(200).send(data);
+    })
+    .catch(e =>{
+    return next(new Error(e))
+    })
+}
+
+exports.get_user = function(){
+    try{
+        db.User.findById(req.params.userId, function (err, data) {
+            if(err){
+                next(err);
+            }
+            res.status(200).send(data)
+        });
+        }catch(e){
+            next(new Error(e))
+        }
+}
+
 }
