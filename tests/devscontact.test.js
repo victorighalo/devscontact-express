@@ -15,24 +15,14 @@ let DevContact;
 
 //Reset the DB before starting tests
     before((done) => { 
-        Db.Devs.deleteMany,({}, (err) => { 
-            if(err) done(err)
-            Db.DevCat.deleteMany,({}, (err) => { 
-                if(err) {done(err)}
-                Db.User.deleteMany,({}, (err) => { 
-                    if(err) done(err)
-                              
+        Db.Devs.remove({}, (err) => { 
+            Db.DevCat.remove({}, (err) => { 
+                Db.User.remove({}, (err) => { 
+                    done()
                  });             
              });          
         });          
     });
-
-//     before(async () => {
-//         const collections = await Db.collections();
-//         for (let collection of collections) {       
-//              await collection.deleteOne(); 
-//         }
-//    })
 
 describe('Test Devs Contact and Categories endpoints after Deleting all records the from database', () => {
 
@@ -168,6 +158,7 @@ describe('TEST Category End Points without Auth Token', () => {
               done();
             });
       });
+    });
 
       describe('Authentications Tests', () => {
           it('It should fail to Register a new User with wrong parameters sent', (done)=>{
@@ -201,6 +192,8 @@ describe('TEST Category End Points without Auth Token', () => {
                   done();
               })
         });
+    });
+    describe('POST, Get, Update, Delete Developer Contact', () => {
 
         it('It should Register a new User successfully', (done)=>{
             let Data = {
@@ -215,6 +208,7 @@ describe('TEST Category End Points without Auth Token', () => {
               .post('/auth/register')
               .send(Data)
               .end( (err, res) => {
+                DevContact = res.body
                   res.should.have.status(201);
                   done();
               })
@@ -222,67 +216,29 @@ describe('TEST Category End Points without Auth Token', () => {
                 done(e);
             }
         });
+        it('It Authenticates a User successfully', (done)=>{
+            try{
+            chai.request(server)
+              .post('/auth/login')
+              .send({"email": DevContact.data.email, "password":"testpassword@1_2"})
+              .end( (err, res) => {
+                  res.should.have.status(200);
+                  done();
+              })
+            }catch (e) {
+                done(e);
+            }
+        });
+        it('it should GET all Users', (done) => {
+            chai.request(server)
+                .get('/auth/users')
+                .end((err, res) => {
+                      res.should.have.status(200);
+                      res.body.should.be.a('array');
+                      res.body.length.should.be.eql(1);
+                  done();
+                });
+          });
+
       })
-
-});
-
-
-
-// describe('/POST, Get, Update, Delete Developer Contact', () => {
-//     it('it should POST a new Developer', (done) => {
-//         let Dev = {
-//             "firstname": "James",
-//             "lastname": "King",
-//             "email": "jamesking@gmail.com",
-//             "phone": "08062239670",
-//             "category": catId
-//         }
-//       chai.request(server)
-//           .post('/contact')
-//           .send(Dev)
-//           .end((err, res) => {
-//             DevContact = res.body.data
-//                 res.should.have.status(200);
-//                 res.body.data.should.be.a('object');
-//             done();
-//           });
-//     });
-
-//     it('it should GET all Devs contact', (done) => {
-//         chai.request(server)
-//             .get('/contact')
-//             .end((err, res) => {
-//                   res.should.have.status(200);
-//                   res.body.should.be.a('array');
-//                   res.body.length.should.be.eql(1);
-//               done();
-//             });
-//       });
-
-//       it('it should Update a Devs\' contact', (done) => {
-//         chai.request(server)
-//             .put('/contact')
-//             .send(DevContact)
-//             .end((err, res) => {
-//                   res.should.have.status(200);
-//                   res.body.should.be.a('object');
-//               done();
-//             });
-//       });
-
-//       it('it should Delete a Devs\' contact', (done) => {
-//         chai.request(server)
-//             .delete('/contact')
-//             .send(DevContact)
-//             .end((err, res) => {
-//                 console.log(res.body)
-//                   res.should.have.status(200);
-//                   res.body.should.be.a('object');
-//               done();
-//             });
-//       });
-
-// });
-
-
 });

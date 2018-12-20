@@ -2,9 +2,9 @@ require('dotenv').config()
 const mongoose = require('mongoose');
 mongoose.set('debug', true);
 if(process.env.NODE_ENV == 'DEVELOPMENT'){
-    mongoose.connect(process.env.DB_HOST, { useCreateIndex: true });
+    mongoose.connect(process.env.DB_HOST, { useCreateIndex: true, useNewUrlParser: true  });
 }else{
-   mongoose.connect(process.env.DB_HOST_TEST, { useCreateIndex: true });
+   mongoose.connect(process.env.DB_HOST_TEST, { useCreateIndex: true, useNewUrlParser: true  });
 }
 
 mongoose.PromiseProvider = Promise;

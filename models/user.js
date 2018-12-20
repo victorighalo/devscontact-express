@@ -31,9 +31,7 @@ timestamps: {
     updatedAt: 'updatedAt'
   }
 }
-  );
-
-
+);
 
 UserSchema.methods.generateToken = function(){
   return jwt.sign({_id: this._id}, process.env.JWT_TOKEN)

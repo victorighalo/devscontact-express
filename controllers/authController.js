@@ -43,7 +43,6 @@ exports.user_create =  function(req, res, next){
 exports.user_login = function(req, res, next){
     const {error} = validator.validate_user_login(req.body ); //validate request
     if(error){ next(error)} 
-
         passport.authenticate('local',{ session: false },
         function(err, user, info) {
             if(err){
