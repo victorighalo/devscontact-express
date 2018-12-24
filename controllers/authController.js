@@ -25,10 +25,12 @@ exports.user_create =  function(req, res, next){
             email: req.body.email,
             password: hash
         }).save((err, data) => {
+    
             if(!err){
-                return res.status(201).send({message: 'User registered',data: data});
+                let {email, firstname, lastname, _id, createdAt} = data;
+                return res.status(201).send({message: 'User registered',data: {email, firstname, lastname, _id, createdAt}});
                   }else{
-                    next(`User with email (${req.body.email}) already exists`);
+                    return res.status(400).send({message:`User with email (${req.body.email}) already exists`});
                   }
         })
 
