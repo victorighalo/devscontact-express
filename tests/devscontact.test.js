@@ -14,15 +14,26 @@ let catId;
 let DevContact;
 
 //Reset the DB before starting tests
-    before((done) => { 
-        Db.Devs.remove({}, (err) => { 
-            Db.DevCat.remove({}, (err) => { 
-                Db.User.remove({}, (err) => { 
-                    done()
-                 });             
-             });          
-        });          
-    });
+    describe('Test Suite for resetting test Database before testing EndPoints and responses', () => {
+        it('it should delete all Devs contacts',  async () => {
+            await Db.Devs.deleteMany({}, (err, res) => { 
+                // res.body.length.should.be.eql(0);
+            })
+          });
+
+          it('it should delete all Categories', async () => {
+            await Db.DevCat.deleteMany({}, (err, res) => { 
+                // res.body.length.should.be.eql(0);
+            })
+          });
+        
+          it('it should delete all Users', async  () => {
+            await Db.User.deleteMany({}, (err, res) => { 
+                // res.body.length.should.be.eql(0);
+             });  
+          });
+        });     
+   
 
 describe('Test Devs Contact and Categories endpoints after Deleting all records the from database', () => {
 
@@ -230,14 +241,19 @@ describe('TEST Category End Points without Auth Token', () => {
             }
         });
         it('it should GET all Users', (done) => {
-            chai.request(server)
+            try{
+             chai.request(server)
                 .get('/auth/users')
                 .end((err, res) => {
+                    console.log(err, res)
                       res.should.have.status(200);
                       res.body.should.be.a('array');
-                      res.body.length.should.be.eql(1);
-                  done();
+                      res.body.length.should.be.eql(1); 
+                      done()
                 });
+            }catch(e){
+                done(e);
+            }
           });
 
       })

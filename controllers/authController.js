@@ -25,12 +25,12 @@ exports.user_create =  function(req, res, next){
             email: req.body.email,
             password: hash
         }).save((err, data) => {
-    
+
             if(!err){
                 let {email, firstname, lastname, _id, createdAt} = data;
-                return res.status(201).send({message: 'User registered',data: {email, firstname, lastname, _id, createdAt}});
-                  }else{
-                    return res.status(400).send({message:`User with email (${req.body.email}) already exists`});
+                 res.status(201).send({message: 'User registered',data: {email, firstname, lastname, _id, createdAt}});
+                  }else if(err){
+                     next(new Error(`User with email (${req.body.email}) already exists`));
                   }
         })
 
@@ -65,18 +65,19 @@ exports.user_login = function(req, res, next){
     
         }
         )(req,res);
+    }
 
-exports.get_users_all = function(req, res, next){
-    db.User.find({})
-    .then( data => {
-        res.status(200).send(data);
-    })
-    .catch(e =>{
-    return next(new Error(e))
-    })
-}
+    module.exports.get_user_all = function(req, res, next){
+        db.User.find({})
+        .then( data => {
+            res.status(200).send(data);
+        })
+        .catch(e =>{
+        return next(new Error(e))
+        })
+    }
 
-exports.get_user = function(){
+exports.get_user = function(req, res, next){
     try{
         db.User.findById(req.params.userId, function (err, data) {
             if(err){
@@ -87,6 +88,4 @@ exports.get_user = function(){
         }catch(e){
             next(new Error(e))
         }
-}
-
 }
