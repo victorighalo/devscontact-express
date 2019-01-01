@@ -34,7 +34,7 @@ Methods
         	"_id": "5c0fbd14f7d2f0361df73507",
         	"firstname": "Samnuel",
         	"lastname": "Victor",
-        	"email": "victorighalo@gmail.com",
+        	"email": "vtest@email.com",
         	"phone": 8062239670,
         	"category": {
             	"_id": "5c07bed0a55cd01aecbc70f8",
